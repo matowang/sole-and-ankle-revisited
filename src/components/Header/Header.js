@@ -1,10 +1,14 @@
-import React from 'react';
-import styled from 'styled-components/macro';
+import React from "react";
+import styled from "styled-components/macro";
 
-import { COLORS, WEIGHTS } from '../../constants';
-import Logo from '../Logo';
-import SuperHeader from '../SuperHeader';
-import MobileMenu from '../MobileMenu';
+import { COLORS, WEIGHTS } from "../../constants";
+import Logo from "../Logo";
+import SuperHeader from "../SuperHeader";
+import MobileMenu from "../MobileMenu";
+import Icon from "../Icon";
+import { QUERIES } from "../../constants";
+import UnstyledButton from "../UnstyledButton";
+import VisuallyHidden from "../VisuallyHidden";
 
 const Header = () => {
   const [showMobileMenu, setShowMobileMenu] = React.useState(false);
@@ -28,8 +32,38 @@ const Header = () => {
           <NavLink href="/women">Women</NavLink>
           <NavLink href="/kids">Kids</NavLink>
           <NavLink href="/collections">Collections</NavLink>
+          <NavLink href="/collections">Collections</NavLink>
         </Nav>
         <Side />
+        <MobileNav>
+          <UnstyledButton>
+            <Icon
+              color={"var(--color-gray-900)"}
+              id="shopping-bag"
+              size={`${24 / 16}rem`}
+              strokeWidth={2}
+            />
+            <VisuallyHidden>Open Cart</VisuallyHidden>
+          </UnstyledButton>
+          <UnstyledButton>
+            <Icon
+              color={"var(--color-gray-900)"}
+              id="search"
+              size={`${24 / 16}rem`}
+              strokeWidth={2}
+            />
+            <VisuallyHidden>Search</VisuallyHidden>
+          </UnstyledButton>
+          <UnstyledButton onClick={() => setShowMobileMenu(true)}>
+            <Icon
+              color={"var(--color-gray-900)"}
+              id="menu"
+              size={`${24 / 16}rem`}
+              strokeWidth={2}
+            />
+            <VisuallyHidden>Open Menu</VisuallyHidden>
+          </UnstyledButton>
+        </MobileNav>
       </MainHeader>
 
       <MobileMenu
@@ -45,13 +79,35 @@ const MainHeader = styled.div`
   align-items: baseline;
   padding: 18px 32px;
   height: 72px;
-  border-bottom: 1px solid ${COLORS.gray[300]};
+  border-bottom: 1px solid var(--color-gray-300);
+  overflow-x: auto;
+  overflow-y: clip;
+  @media ${QUERIES.tabletAndDown} {
+    align-items: center;
+  }
+  @media ${QUERIES.phoneAndDown} {
+    padding: 18px 16px;
+  }
 `;
 
 const Nav = styled.nav`
   display: flex;
-  gap: 48px;
+  gap: clamp(1rem, 5.7vw - 1.5rem, 3rem);
   margin: 0px 48px;
+  @media ${QUERIES.tabletAndDown} {
+    display: none;
+  }
+`;
+
+const MobileNav = styled.nav`
+  display: none;
+  @media ${QUERIES.tabletAndDown} {
+    display: flex;
+    gap: 32px;
+  }
+  @media ${QUERIES.phoneAndDown} {
+    gap: 16px;
+  }
 `;
 
 const Side = styled.div`
@@ -62,11 +118,11 @@ const NavLink = styled.a`
   font-size: 1.125rem;
   text-transform: uppercase;
   text-decoration: none;
-  color: ${COLORS.gray[900]};
+  color: var(--color-gray-900);
   font-weight: ${WEIGHTS.medium};
 
   &:first-of-type {
-    color: ${COLORS.secondary};
+    color: var(--color-secondary);
   }
 `;
 
