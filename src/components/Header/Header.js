@@ -26,13 +26,27 @@ const Header = () => {
           <Logo />
         </Side>
         <Nav>
-          <NavLink href="/sale">Sale</NavLink>
-          <NavLink href="/new">New&nbsp;Releases</NavLink>
-          <NavLink href="/men">Men</NavLink>
-          <NavLink href="/women">Women</NavLink>
-          <NavLink href="/kids">Kids</NavLink>
-          <NavLink href="/collections">Collections</NavLink>
-          <NavLink href="/collections">Collections</NavLink>
+          <NavLink href="/sale">
+            <FlippingText>Sale</FlippingText>
+          </NavLink>
+          <NavLink href="/new">
+            <FlippingText>New&nbsp;Releases</FlippingText>
+          </NavLink>
+          <NavLink href="/men">
+            <FlippingText>Men</FlippingText>
+          </NavLink>
+          <NavLink href="/women">
+            <FlippingText>Women</FlippingText>
+          </NavLink>
+          <NavLink href="/kids">
+            <FlippingText>Kids</FlippingText>
+          </NavLink>
+          <NavLink href="/collections">
+            <FlippingText>Collections</FlippingText>
+          </NavLink>
+          <NavLink href="/collections">
+            <FlippingText>Collections</FlippingText>
+          </NavLink>
         </Nav>
         <Side />
         <MobileNav>
@@ -73,6 +87,19 @@ const Header = () => {
     </header>
   );
 };
+
+function FlippingText(props) {
+  return (
+    <FlippingTextWrapper>
+      <FlippingTextAnimator>
+        <FlippingTextContent>{props.children}</FlippingTextContent>
+        <FlippingTextRevealed aria-hidden>
+          {props.children}
+        </FlippingTextRevealed>
+      </FlippingTextAnimator>
+    </FlippingTextWrapper>
+  );
+}
 
 const MainHeader = styled.div`
   display: flex;
@@ -124,6 +151,34 @@ const NavLink = styled.a`
   &:first-of-type {
     color: var(--color-secondary);
   }
+`;
+
+const FlippingTextWrapper = styled.div`
+  height: 1lh;
+  perspective: 100px;
+`;
+
+const FlippingTextAnimator = styled.div`
+  @media (prefers-reduced-motion: no-preference) {
+    background: white;
+    transform-style: preserve-3d;
+    transition: transform 400ms;
+    transform-origin: center center -0.5lh;
+    ${FlippingTextWrapper}:hover & {
+      transform: rotateX(90deg);
+      transition: transform 200ms;
+    }
+  }
+`;
+
+const FlippingTextContent = styled.div``;
+
+const FlippingTextRevealed = styled.div`
+  position: absolute;
+  background: var(--color-gray-100);
+  transform-style: preserve-3d;
+  transform-origin: top;
+  transform: rotateX(-90deg);
 `;
 
 export default Header;

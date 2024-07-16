@@ -35,7 +35,9 @@ const ShoeCard = ({
     <Link href={`/shoe/${slug}`}>
       <Wrapper>
         <ImageWrapper>
-          <Image alt="" src={imageSrc} />
+          <ImageClipper>
+            <Image alt="" src={imageSrc} />
+          </ImageClipper>
           {variant === "on-sale" && <SaleFlag>Sale</SaleFlag>}
           {variant === "new-release" && <NewFlag>Just released!</NewFlag>}
         </ImageWrapper>
@@ -64,20 +66,23 @@ const ShoeCard = ({
   );
 };
 
-const Link = styled.a`
-  text-decoration: none;
-  color: inherit;
-`;
-
 const Wrapper = styled.article``;
 
 const ImageWrapper = styled.div`
   position: relative;
 `;
 
+const ImageClipper = styled.div`
+  overflow: clip;
+  border-radius: 16px 16px 4px 4px;
+`;
+
 const Image = styled.img`
   width: 100%;
-  border-radius: 16px 16px 4px 4px;
+  transition: transform 500ms, filter 2000ms;
+  transform-origin: center 80%;
+  display: block;
+  will-change: transform;
 `;
 
 const Row = styled.div`
@@ -117,6 +122,21 @@ const Flag = styled.div`
   font-weight: ${WEIGHTS.bold};
   color: var(--color-white);
   border-radius: 2px;
+
+  @keyframes shake {
+    0% {
+      transform: rotate(0);
+    }
+    25% {
+      transform: rotate(-2deg);
+    }
+    75% {
+      transform: rotate(2deg);
+    }
+    100% {
+      transform: rotate(0);
+    }
+  }
 `;
 
 const SaleFlag = styled(Flag)`
@@ -124,6 +144,24 @@ const SaleFlag = styled(Flag)`
 `;
 const NewFlag = styled(Flag)`
   background-color: var(--color-secondary);
+`;
+
+const Link = styled.a`
+  text-decoration: none;
+  color: inherit;
+  filter: contrast(100%);
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    &:hover ${Image} {
+      transform: scale(1.1);
+      transition: transform 200ms, filter 2000ms;
+      filter: contrast(110%);
+    }
+
+    &:hover ${Flag} {
+      animation: shake 200ms;
+      animation-iteration-count: 2;
+    }
+  }
 `;
 
 export default ShoeCard;

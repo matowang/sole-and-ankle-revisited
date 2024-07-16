@@ -7,6 +7,18 @@ import UnstyledButton from "../UnstyledButton";
 import Icon from "../Icon";
 import VisuallyHidden from "../VisuallyHidden";
 
+const NAV_LINKS = [
+  {
+    href: "/sale",
+    name: "sale",
+  },
+  { href: "/new", name: "New Releases" },
+  { href: "/men", name: "Men" },
+  { href: "/women", name: "Women" },
+  { href: "/kids", name: "Kids" },
+  { href: "/collections", name: "Collections" },
+];
+
 const MobileMenu = ({ isOpen, onDismiss }) => {
   if (!isOpen) {
     return null;
@@ -25,14 +37,19 @@ const MobileMenu = ({ isOpen, onDismiss }) => {
           />
         </CloseButton>
         <Nav>
-          <NavLink href="/sale" isHighlighted>
-            Sale
-          </NavLink>
-          <NavLink href="/new">New&nbsp;Releases</NavLink>
-          <NavLink href="/men">Men</NavLink>
-          <NavLink href="/women">Women</NavLink>
-          <NavLink href="/kids">Kids</NavLink>
-          <NavLink href="/collections">Collections</NavLink>
+          {NAV_LINKS.map((navLink, i) => {
+            return (
+              <NavLink
+                href={navLink.href}
+                id={navLink.name}
+                style={{
+                  animationDelay: `${i * 50 + 200}ms`,
+                }}
+              >
+                {navLink.name}
+              </NavLink>
+            );
+          })}
         </Nav>
         <Footer>
           <FooterLink href="/terms">Terms and Conditions</FooterLink>
@@ -50,10 +67,36 @@ const Overlay = styled(DialogOverlay)`
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--color-backdrop);
+  background-color: var(--color-backdrop);
+  @keyframes appearBackground {
+    from {
+      background-color: transparent;
+    }
+    to {
+      background-color: var(--color-backdrop);
+    }
+  }
+  animation: appearBackground 500ms both;
+  perspective: 500px;
 `;
 
 const Content = styled(DialogContent)`
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes swingIn {
+      from {
+        transform: rotateY(-90deg);
+        opacity: 0;
+      }
+      to {
+        transform: rotateYX(0deg);
+        opacity: 1;
+      }
+    }
+    transform-origin: right;
+    animation: swingIn 500ms both cubic-bezier(0.17, 0.67, 0.7, 1.33);
+  }
+  --overfill: 32px;
+  margin-right: calc(var(--overfill) * -1);
   position: absolute;
   height: 100%;
   width: 300px;
@@ -63,7 +106,7 @@ const Content = styled(DialogContent)`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 32px;
+  padding: 32px calc(32px + var(--overfill)) 32px 32px;
 `;
 
 const Nav = styled.nav`
@@ -81,11 +124,34 @@ const NavLink = styled.a`
   }
   color: ${(p) =>
     p.isHighlighted ? "var(--color-secondary)" : "var(--color-gray-900)"};
+  @keyframes appear {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  animation: appear 300ms both;
+  animation-delay: 200ms;
 `;
 
 const Footer = styled.footer`
   display: flex;
   flex-direction: column;
+
+  @keyframes appear {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  animation: appear 300ms both;
+  animation-delay: 400ms;
 `;
 
 const FooterLink = styled.a`
@@ -97,7 +163,7 @@ const CloseButton = styled(UnstyledButton)`
   align-self: end;
   position: absolute;
   padding: 16px;
-  right: 0px;
+  right: var(--overfill);
   top: 10px;
 `;
 
